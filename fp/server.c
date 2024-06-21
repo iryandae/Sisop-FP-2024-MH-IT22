@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <bcrypt.h>
+#include <stdbool.h>
 
 #define PORT 8080
 #define MAX_CLIENTS 10
@@ -64,7 +65,7 @@ void reg_user(int sock, char *username, char *password, client_t *clinfo) {
         return;
     }
     struct stat st = {0};
-    char *path="/home/tka/sisop/fp/DiscorIT";
+    char *path="/home/tka/sisop/fp/DiscorIT/";
 
     if(stat(path, &st) == -1){
         if(mkdir(path, 0700)<0){
@@ -77,9 +78,9 @@ void reg_user(int sock, char *username, char *password, client_t *clinfo) {
     }
 
     FILE *fp = fopen("/home/tka/sisop/fp/DiscorIT/users.csv", "r+");
-    if(!file){
+    if(!fp){
         fp = fopen("/home/tka/sisop/fp/DiscorIT/users.csv", "w+");
-        if(!file){
+        if(!fp){
             char response[] = "Failed to open file";
             if(write(clinfo->socket, response, strlen(response)) < 0){
                 perror("write failed");
@@ -92,7 +93,7 @@ void reg_user(int sock, char *username, char *password, client_t *clinfo) {
     bool found = false;
     int user_count = 0;
 
-    while(fgets(line,sizeof(line),file)){
+    while(fgets(line,sizeof(line),fp)){
         char *username_file = strtok(line, " ");
         if(username_file == NULL) continue;
         username_file=strtok(NULL, ",");
@@ -108,27 +109,28 @@ void reg_user(int sock, char *username, char *password, client_t *clinfo) {
         if(write(clinfo->socket, response, strlen(response)) < 0){
             perror("write failed");
         }
-        fclose(file);
+        fclose(fp);
         return;
     }
 
-    fseek(file, 0, SEEK_END);
+    fseek(fp, 0, SEEK_END);
 
-    snprintf(line, sizeof(line), "$2y$12$%.22s", "bcrypt_gensalt_random");
+    char salt[64];
+    snprintf(salt, sizeof(salt), "$2y$12$%.22s", "bcrypt_gensalt_random");
     char hashed_password[BCRYPT_HASHSIZE];
-    bcrypt_hashpw(password, 10, hashed_password);
+    bcrypt_hashpw(password, salt, hashed_password);
 
-    if(hash==NULL){
+    if(hashed_password==NULL){
         char response[] = "Failed to hash password";
         if(write(clinfo->socket, response, strlen(response)) < 0){
             perror("write failed");
         }
-        fclose(file);
+        fclose(fp);
         return;
     }
 
-    fprintf(file, "%d, %s, %s, %s\n", user_count+1, username, hashed_password, user_count==0?"admin":"user");
-    fclose(file);
+    fprintf(fp, "%d, %s, %s, %s\n", user_count+1, username, hashed_password, user_count==0?"admin":"user");
+    fclose(fp);
 
     char response[100];
     snprintf(response, sizeof(response), "User %s registered", username);
