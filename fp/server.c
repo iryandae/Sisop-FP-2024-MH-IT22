@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <bcrypt.h>
 #include <stdbool.h>
+#include <pthread.h>
 
 #define PORT 8080
 #define MAX_CLIENTS 10
@@ -171,7 +172,7 @@ void reg_user(int sock, char *username, char *password, client_t *clinfo) {
 //     printf("%s\n", buffer);
 // }
 
-void handle_client(void *arg) {
+void *handle_client(void *arg) {
     client_t *clinfo = (client_t *)arg;
     char buffer[BUFFER_SIZE];
     int readClient;
@@ -275,6 +276,18 @@ int main() {
     valread = read(new_socket, buffer, 1024);
     printf("%s\n", buffer);
     send(new_socket, hello, strlen(hello), 0);
-    printf("Hello message sent\n");
-    return 0;
+    printf("Server running\n");
+    
+    while(1){
+        if((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0) {
+            perror("failed to accept");
+            exit(EXIT_FAILURE);
+        }
+        pthread_t thread;
+        client_t *clinfo = (client_t *)malloc(sizeof(client_t));
+        clinfo->socket = new_socket;
+        clinfo->address = address;
+
+        pthread_create(&thread, NULL, handle_client, (void *)clinfo);
+    }
 }
