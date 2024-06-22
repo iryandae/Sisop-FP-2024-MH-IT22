@@ -63,24 +63,24 @@ int main(int argc, char *argv[]) {
         char *password = argv[4];
         snprintf(command, sizeof(command), "REGISTER %s %s", username, password);
     }
-    else if(strcmp(argv[1], "LOGIN")==0){
-        if(argc<5||strcmp(argv[3],"-p")!=0){
-            printf("Invalid command\n");
-            return 0;
-        }
+    // else if(strcmp(argv[1], "LOGIN")==0){
+    //     if(argc<5||strcmp(argv[3],"-p")!=0){
+    //         printf("Invalid command\n");
+    //         return 0;
+    //     }
 
-        char *username = argv[2];
-        char *password = argv[4];
-        snprintf(command, sizeof(command), "LOGIN %s %s", username, password);
+    //     char *username = argv[2];
+    //     char *password = argv[4];
+    //     snprintf(command, sizeof(command), "LOGIN %s %s", username, password);
 
-        if(send(clientSocket, command, strlen(command), 0) < 0){
-            perror("send failed");
-            exit(EXIT_FAILURE);
-        }
+    //     if(send(clientSocket, command, strlen(command), 0) < 0){
+    //         perror("send failed");
+    //         exit(EXIT_FAILURE);
+    //     }
 
-        char response[1024];
-        memset(response, 0, sizeof(response));
-    }
+    //     char response[1024];
+    //     memset(response, 0, sizeof(response));
+    // }
 
     // Send and receive data
     // TODO: Add your code here
