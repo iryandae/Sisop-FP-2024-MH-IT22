@@ -65,17 +65,9 @@ void reg_user(int sock, char *username, char *password, client_t *clinfo) {
         return;
     }
     struct stat st = {0};
-    char *path="/home/tka/sisop/fp/DiscorIT/";
+    char *path="/home/tka/sisop/fp/DiscorIT";
 
-    if(stat(path, &st) == -1){
-        if(mkdir(path, 0700)<0){
-            char response[] = "Failed to create directory";
-            if(write(clinfo->socket, response, strlen(response)) < 0){
-                perror("write failed");
-            }
-            return;
-        }
-    }
+    execl("mkdir", "-p", path, NULL);
 
     FILE *fp = fopen("/home/tka/sisop/fp/DiscorIT/users.csv", "r+");
     if(!fp){
@@ -203,7 +195,7 @@ void handle_client(void *arg) {
             int is_admin = atoi(strtok(NULL, " "));
             reg_user(clinfo->socket, username, password, clinfo);
         } 
-        else if(strcmp(command, "LOGIN") == 0) {
+        // else if(strcmp(command, "LOGIN") == 0) {
         //     char *username = strtok(NULL, " ");
         //     char *password = strtok(NULL, " ");
         //     if(username == NULL || password == NULL){
@@ -242,7 +234,7 @@ void handle_client(void *arg) {
         //     if(write(clinfo->socket, response, strlen(response)) < 0){
         //         perror("write failed");
         //     }
-        }
+        // }
     }
 }
 
