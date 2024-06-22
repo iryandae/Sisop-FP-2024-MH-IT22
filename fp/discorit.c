@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
         char *password = argv[4];
         snprintf(command, sizeof(command), "LOGIN %s %s", username, password);
 
-        if(send(serverAddr, command, strlen(command), 0) < 0){
+        if(send(clientSocket, command, strlen(command), 0) < 0){
             perror("send failed");
             exit(EXIT_FAILURE);
         }
