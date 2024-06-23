@@ -57,6 +57,18 @@ void daemonize() {
     dup2(log_fd, STDERR_FILENO);
 }
 
+void create_directory(const char *path) {
+    struct stat st = {0};
+
+    if (stat(path, &st) == -1) {
+        if (mkdir(path, 0700) < 0) {
+            perror("Failed to create directory");
+            return;
+        }
+    }
+    return;
+}
+
 void reg_user(int sock, char *username, char *password, client_t *clinfo) {
     if(username == NULL || password == NULL) {
         char response[] = "Invalid command";
@@ -65,10 +77,9 @@ void reg_user(int sock, char *username, char *password, client_t *clinfo) {
         }
         return;
     }
-    struct stat st = {0};
     char *path="/home/tka/sisop/fp/DiscorIT";
+    create_directory(path);
 
-    execl("mkdir", "-p", path, NULL);
 
     FILE *fp = fopen("/home/tka/sisop/fp/DiscorIT/users.csv", "r+");
     if(!fp){
