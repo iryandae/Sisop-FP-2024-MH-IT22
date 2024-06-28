@@ -51,7 +51,7 @@ void connect_to_server() {
     }
 }
 ```
-Fungsi untuk menyambungkan socket
+Fungsi untuk menyambungkan _socket_
 
 ```c
 void handle_command(const char *command, char *username, char *channel, char *room) {
@@ -111,7 +111,7 @@ void handle_command(const char *command, char *username, char *channel, char *ro
     }
 }
 ```
-Fungsi untuk handle command
+Fungsi untuk _handle command_
 
 ```c
 int main(int argc, char *argv[]) {
@@ -212,7 +212,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-Fungsi Main untuk memangggil fungsi dan mengeluarkan output
+Fungsi ```main``` untuk memangggil fungsi dan mengeluarkan output
 
 
 ### Server
@@ -254,7 +254,7 @@ typedef struct {
     char logged_in_room[50];
 } client_info;
 ```
-Definisikan port,cbuffer, path dan struct
+Definisikan _port, cbuffer, path,_ dan _struct_
 
 ```c
 client_info *clients[MAX_CLIENTS];
@@ -298,7 +298,7 @@ void remove_user_root(const char *target_user, client_info *client);
 
 void handle_exit(client_info *client);
 ```
-Deklarasi array clients dan clients mutex serta fungsi untuk:
+Deklarasi _array_ clients dan clients mutex serta fungsi untuk:
 1. handle client
 2. berjalan secara daemon
 3. register user
@@ -3126,7 +3126,7 @@ char username[50];
 char channel[50] = "";
 char room[50] = "";
 ```
-Definisikan buffer, port, array yang digunakan
+Definisikan _buffer, port,_ dan _array_ yang digunakan
 
 ```c
 void connect_to_server() {
@@ -3151,7 +3151,7 @@ void connect_to_server() {
     }
 }
 ```
-Fungsi untuk menyambungkan socket
+Fungsi untuk menyambungkan _socket_
 
 ```c
 void handle_command(const char *command) {
@@ -3208,7 +3208,7 @@ void handle_command(const char *command) {
     }
 }
 ```
-Fungsi untuk handling command
+Fungsi untuk _handling command_
 
 ```c
 void display_chat_history(const char *filepath) {
@@ -3392,4 +3392,4 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-Fungsi utama untuk memanggil fungsi lainnya untuk menampilkan output
+Fungsi ```main``` untuk memanggil fungsi lainnya untuk menampilkan output
