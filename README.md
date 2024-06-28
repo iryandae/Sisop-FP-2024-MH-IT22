@@ -409,6 +409,10 @@ int main() {
 ```
 
 ### Monitor
+1. User dapat menampilkan isi chat secara real-time menggunakan monitor. Jika ada perubahan pada isi chat, perubahan tersebut akan langsung ditampilkan di terminal.
+2. Sebelum dapat menggunakan monitor, user harus login terlebih dahulu seperti login di DiscorIT.
+3. Untuk keluar dari room dan menghentikan program monitor dengan perintah "EXIT".
+4. Monitor dapat digunakan untuk menampilkan semua chat pada room, mulai dari chat pertama hingga chat yang akan datang.
 ```c
 #include <stdio.h>
 #include <stdlib.h>
