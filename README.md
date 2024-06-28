@@ -6,7 +6,61 @@
 - 5027231024  Furqon Aryadana
 - 5027231057  Elgracito Iryanda Endia
 ---
-### Discorit
+
+__Disclaimer__
+_Program server, discorit, dan monitor TIDAK DIPERBOLEHKAN menggunakan perintah system();_
+
+
+__A. Autentikasi__
+---
+Setiap user harus memiliki username dan password untuk mengakses DiscorIT. Username, password, dan global role disimpan dalam file user.csv. Jika tidak ada user lain dalam sistem, user pertama yang mendaftar otomatis mendapatkan role "ROOT". Username harus bersifat unique dan password wajib di encrypt menggunakan menggunakan bcrypt. Ketika user pertama kali masuk ke channel, mereka memiliki akses terbatas. Jika mereka telah masuk sebelumnya, akses mereka meningkat sesuai dengan admin dan root.
+
+__B. Perbedaan Akses antara Root, Admin, dan User__
+---
+Root: memiliki akses penuh untuk mengelola semua channel, room, dan user. Root adalah akun yang pertama kali mendaftar.  
+Admin: memiliki akses untuk mengelola channel dan room yang mereka buat, serta mengelola user dalam channel mereka.  
+User: dapat mengirim pesan chat, melihat channel, dan room. user menjadi admin di channel yang mereka buat.
+1. List Channel dan Room
+   Setelah Login user dapat melihat daftar channel yang tersedia.
+2. Akses Channel dan Room
+   Akses channel admin dan root. Ketika user pertama kali masuk ke channel, mereka memiliki akses terbatas. Jika mereka telah masuk sebelumnya, akses mereka meningkat sesuai dengan admin dan root.  
+3. Fitur Chat
+   Setiap user dapat mengirim pesan dalam chat. ID pesan chat dimulai dari 1 dan semua pesan disimpan dalam file chat.csv. User dapat melihat pesan-pesan chat yang ada dalam room. Serta user dapat edit dan delete pesan yang sudah dikirim dengan menggunakan ID pesan.
+
+__C. Root__
+---
+Akun yang pertama kali mendaftar otomatis mendapatkan peran "root". Root dapat masuk ke channel manapun tanpa key dan create, update, dan delete pada channel dan room, mirip dengan admin [D]. Root memiliki kemampuan khusus untuk mengelola user, seperti: list, edit, dan Remove.
+
+__D. Admin Channel__
+---
+Setiap user yang membuat channel otomatis menjadi admin di channel tersebut. Informasi tentang user disimpan dalam file auth.csv. Admin dapat create, update, dan delete pada channel dan room, serta dapat remove, ban, dan unban user di channel mereka.
+1. Channel: informasi tentang semua channel disimpan dalam file channel.csv. Semua perubahan dan aktivitas user pada channel dicatat dalam file users.log.
+2. Room: semua perubahan dan aktivitas user pada room dicatat dalam file users.log.
+3. Ban: admin dapat melakukan ban pada user yang nakal. Aktivitas ban tercatat pada users.log. Ketika di ban, role "user" berubah menjadi "banned". Data tetap tersimpan dan user tidak dapat masuk ke dalam channel.
+4. Unban: admin dapat melakukan unban pada user yang sudah berperilaku baik. Aktivitas unban tercatat pada users.log. Ketika di unban, role "banned" berubah kembali menjadi "user" dan dapat masuk ke dalam channel.
+5. Remove user: admin dapat remove user dan tercatat pada users.log.
+
+__E. User__
+---
+User dapat mengubah informasi profil mereka, user yang di ban tidak dapat masuk kedalam channel dan dapat keluar dari room, channel, atau keluar sepenuhnya dari DiscorIT.
+1. Edit User Username
+2. Edit User Password
+3. Banned User
+4. Exit
+
+__F. Error Handling__
+---
+Jika ada command yang tidak sesuai penggunaannya. Maka akan mengeluarkan pesan error dan tanpa keluar dari program client.
+
+__G. Monitor__
+---
+User dapat menampilkan isi chat secara real-time menggunakan monitor. Jika ada perubahan pada isi chat, perubahan tersebut akan langsung ditampilkan di terminal. Sebelum dapat menggunakan monitor, user harus login terlebih dahulu seperti login di DiscorIT. Untuk keluar dari room dan menghentikan program monitor dengan perintah "EXIT". Monitor dapat digunakan untuk menampilkan semua chat pada room, mulai dari chat pertama hingga chat yang akan datang.
+
+---
+### 1. Discorit
+Untuk mengakses DiscorIT, user perlu membuka program client (discorit). Discorit hanya bekerja sebagai client yang mengirimkan request user kepada server. Program server berjalan sebagai server yang menerima semua request dari client dan mengembalikan response kepada client sesuai ketentuan pada soal. __Program server berjalan sebagai daemon__. Untuk hanya menampilkan chat, user perlu membuka program client (monitor). Lebih lengkapnya pada poin monitor. Program client dan server berinteraksi melalui socket. Server dapat terhubung dengan lebih dari satu client.
+
+Deklarasi library yang akan digunakan
 ```c
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,13 +73,12 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 ```
-Deklarasi library yang akan digunakan
-
+Definisi buffer yang digunakan
 ```c
 #define PORT 8080
 #define BUFFER_SIZE 1024
 ```
-Definisi buffer yang digunakan
+Fungsi untuk menyambungkan _socket_
 
 ```c
 int server_fd;
@@ -52,7 +105,7 @@ void connect_to_server() {
     }
 }
 ```
-Fungsi untuk menyambungkan _socket_
+Fungsi untuk _handle command_
 
 ```c
 void handle_command(const char *command, char *username, char *channel, char *room) {
@@ -112,7 +165,7 @@ void handle_command(const char *command, char *username, char *channel, char *ro
     }
 }
 ```
-Fungsi untuk _handle command_
+Fungsi ```main``` untuk memangggil fungsi dan mengeluarkan output
 
 ```c
 int main(int argc, char *argv[]) {
@@ -213,11 +266,10 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-Fungsi ```main``` untuk memangggil fungsi dan mengeluarkan output
 
 ___
 
-### Server
+### 2. Server
 ```c
 #include <stdio.h>
 #include <stdlib.h>
@@ -3097,11 +3149,14 @@ Fungsi Main yang berisi fungsi yang dipanggil untuk:
 
 ___
 
-### Monitor
+### 3. Monitor
 1. User dapat menampilkan isi chat secara real-time menggunakan monitor. Jika ada perubahan pada isi chat, perubahan tersebut akan langsung ditampilkan di terminal.
 2. Sebelum dapat menggunakan monitor, user harus login terlebih dahulu seperti login di DiscorIT.
 3. Untuk keluar dari room dan menghentikan program monitor dengan perintah "EXIT".
 4. Monitor dapat digunakan untuk menampilkan semua chat pada room, mulai dari chat pertama hingga chat yang akan datang.
+
+
+Deklarasi library yang akan digunakan
 ```c
 #include <stdio.h>
 #include <stdlib.h>
@@ -3116,12 +3171,11 @@ ___
 #include <pthread.h>
 #include <time.h>
 ```
-Deklarasi library yang akan digunakan
 
+Definisikan _buffer, port,_ dan _array_ yang digunakan
 ```c
 #define PORT 8080
 #define BUFFER_SIZE 1024
-
 
 int server_fd;
 bool running = true;
@@ -3129,8 +3183,8 @@ char username[50];
 char channel[50] = "";
 char room[50] = "";
 ```
-Definisikan _buffer, port,_ dan _array_ yang digunakan
 
+Fungsi untuk menyambungkan _socket_
 ```c
 void connect_to_server() {
     struct sockaddr_in serv_addr;
@@ -3154,8 +3208,8 @@ void connect_to_server() {
     }
 }
 ```
-Fungsi untuk menyambungkan _socket_
 
+Fungsi untuk _handling command_
 ```c
 void handle_command(const char *command) {
     if (command == NULL) {
@@ -3211,8 +3265,8 @@ void handle_command(const char *command) {
     }
 }
 ```
-Fungsi untuk _handling command_
 
+Fungsi untuk menampilkan chat
 ```c
 void display_chat_history(const char *filepath) {
     FILE *chat_file = fopen(filepath, "r");
@@ -3255,8 +3309,8 @@ void display_chat_history(const char *filepath) {
     fflush(stdout);
 }
 ```
-Fungsi untuk menampilkan chat
 
+Fungsi untuk monitor ```csv```
 ```c
 void *monitor_csv(void *arg) {
     char filepath[256];
@@ -3281,8 +3335,8 @@ void *monitor_csv(void *arg) {
 }
 
 ```
-Fungsi untuk monitor csv
 
+Fungsi ```main``` untuk memanggil fungsi lainnya untuk menampilkan output
 ```c
 int main(int argc, char *argv[]) {
     if (argc <= 3) {
@@ -3395,4 +3449,4 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-Fungsi ```main``` untuk memanggil fungsi lainnya untuk menampilkan output
+---
