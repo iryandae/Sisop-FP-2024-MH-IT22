@@ -17,10 +17,16 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+```
+Deklarasi library yang akan digunakan
 
+```c
 #define PORT 8080
 #define BUFFER_SIZE 1024
+```
+Definisi buffer yang digunakan
 
+```c
 int server_fd;
 
 void connect_to_server() {
@@ -44,7 +50,10 @@ void connect_to_server() {
         exit(EXIT_FAILURE);
     }
 }
+```
+Fungsi untuk menyambungkan socket
 
+```c
 void handle_command(const char *command, char *username, char *channel, char *room) {
     if (command == NULL) {
         printf("Perintah tidak boleh kosong\n");
@@ -101,7 +110,10 @@ void handle_command(const char *command, char *username, char *channel, char *ro
         }
     }
 }
+```
+Fungsi untuk handle command
 
+```c
 int main(int argc, char *argv[]) {
     if (argc < 3) {
         printf("Penggunaan: %s REGISTER/LOGIN username -p password\n", argv[0]);
@@ -200,6 +212,8 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
+Fungsi Main untuk memangggil fungsi dan mengeluarkan output
+
 
 ### Server
 ```c
@@ -219,13 +233,17 @@ int main(int argc, char *argv[]) {
 #include <dirent.h>
 #include <ctype.h>
 #include <time.h>
+```
+Deklarasi library yang akan digunakan
 
+```c
 #define PORT 8080
 #define MAX_CLIENTS 10
 #define BUFFER_SIZE 10240
 #define SALT_SIZE 64
 #define USERS_FILE "/home/tka/sisop/fp/DiscorIT/users.c"
 #define CHANNELS_FILE "/home/tka/sisop/fp/DiscorIT/channels.csv"
+
 
 typedef struct {
     int socket;
@@ -235,7 +253,10 @@ typedef struct {
     char logged_in_channel[50];
     char logged_in_room[50];
 } client_info;
+```
+Definisikan port,cbuffer, path dan struct
 
+```c
 client_info *clients[MAX_CLIENTS];
 pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -270,13 +291,48 @@ void unban_user(const char *channel, const char *user_to_unban, client_info *cli
 void remove_user(const char *channel, const char *username, client_info *client);
 void log_activity(const char *channel, const char *message);
 
-//khusus root
+
 void list_users_root(client_info *client);
 void edit_user(const char *target_user, const char *new_value, bool is_password, client_info *client);
 void remove_user_root(const char *target_user, client_info *client);
 
 void handle_exit(client_info *client);
+```
+Deklarasi array clients dan clients mutex serta fungsi untuk:
+1. handle client
+2. berjalan secara daemon
+3. register user
+4. login user
+5. create directory
+6. create channel
+7. create room
+8. list channels
+9. list rooms
+10. list users
+11. join channel
+12. verify key
+13. join room
+14. send chat
+15. see chat
+16. edit chat
+17. edit channel
+18. edit room
+19. edit profile self
+20. delete chat
+21. delete directory
+22. delete channel
+23. delete room
+24. delete all rooms
+25. ban user
+26. unban user
+27. remove user
+28. log activity
+29. list users root
+30. edit user
+31. remove user root
+32. handle exit
 
+```c
 int main() {
     daemonize();
 
@@ -2992,6 +3048,51 @@ void handle_exit(client_info *client) {
     }
 }
 ```
+Fungsi Main yang berisi fungsi yang dipanggil untuk:
+1. **Fungsi Utama:**
+    - handle_client
+    - daemonize
+
+2. **User Authentication:**
+    - register_user
+    - login_user
+
+3. **Channel and Room Management:**
+    - create_directory
+    - create_channel
+    - create_room
+    - list_channels
+    - list_rooms
+    - join_channel
+    - verify_key
+    - join_room
+    - edit_channel
+    - edit_room
+    - delete_channel
+    - delete_room
+    - delete_all_rooms
+    - ban_user
+    - unban_user
+    - remove_user
+
+4. **Message Handling:**
+    - send_chat
+    - see_chat
+    - edit_chat
+    - delete_chat
+
+5. **Additional Functions:**
+    - create_directory
+    - delete_directory
+    - list_users
+    - log_activity
+    - handle_exit
+
+6. **Root User Functions:**
+    - list_users_root
+    - edit_user
+    - remove_user_root
+
 
 ### Monitor
 1. User dapat menampilkan isi chat secara real-time menggunakan monitor. Jika ada perubahan pada isi chat, perubahan tersebut akan langsung ditampilkan di terminal.
@@ -3011,16 +3112,23 @@ void handle_exit(client_info *client) {
 #include <sys/stat.h>
 #include <pthread.h>
 #include <time.h>
+```
+Deklarasi library yang akan digunakan
 
+```c
 #define PORT 8080
 #define BUFFER_SIZE 1024
+
 
 int server_fd;
 bool running = true;
 char username[50];
 char channel[50] = "";
 char room[50] = "";
+```
+Definisikan buffer, port, array yang digunakan
 
+```c
 void connect_to_server() {
     struct sockaddr_in serv_addr;
 
@@ -3042,7 +3150,10 @@ void connect_to_server() {
         exit(EXIT_FAILURE);
     }
 }
+```
+Fungsi untuk menyambungkan socket
 
+```c
 void handle_command(const char *command) {
     if (command == NULL) {
         printf("Perintah tidak boleh kosong\n");
@@ -3096,7 +3207,10 @@ void handle_command(const char *command) {
         }
     }
 }
+```
+Fungsi untuk handling command
 
+```c
 void display_chat_history(const char *filepath) {
     FILE *chat_file = fopen(filepath, "r");
     if (!chat_file) {
@@ -3137,7 +3251,10 @@ void display_chat_history(const char *filepath) {
 
     fflush(stdout);
 }
+```
+Fungsi untuk menampilkan chat
 
+```c
 void *monitor_csv(void *arg) {
     char filepath[256];
     snprintf(filepath, sizeof(filepath), "/home/tka/sisop/fp/DiscorIT/%s/%s/chat.csv", channel, room);
@@ -3160,6 +3277,10 @@ void *monitor_csv(void *arg) {
     return NULL;
 }
 
+```
+Fungsi untuk monitor csv
+
+```c
 int main(int argc, char *argv[]) {
     if (argc <= 3) {
         printf("Penggunaan: %s LOGIN username -p password\n", argv[0]);
@@ -3271,3 +3392,4 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
+Fungsi utama untuk memanggil fungsi lainnya untuk menampilkan output
