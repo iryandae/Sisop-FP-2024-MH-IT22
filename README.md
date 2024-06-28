@@ -1,11 +1,11 @@
 ### Sisop-FP-2024-MH-IT22
-# Laporan Resmi Fun Project Sistem Operasi Kelompok IT22
 ---
+# Laporan Resmi Fun Project Sistem Operasi Kelompok IT22
 ## Anggota Kelompok
 - 5027231003  Chelsea Vania Hariyono
 - 5027231024  Furqon Aryadana
 - 5027231057  Elgracito Iryanda Endia
-___
+---
 ### Discorit
 ```c
 #include <stdio.h>
