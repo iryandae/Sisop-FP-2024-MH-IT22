@@ -57,7 +57,7 @@ __G. Monitor__
 User dapat menampilkan isi chat secara real-time menggunakan monitor. Jika ada perubahan pada isi chat, perubahan tersebut akan langsung ditampilkan di terminal. Sebelum dapat menggunakan monitor, user harus login terlebih dahulu seperti login di DiscorIT. Untuk keluar dari room dan menghentikan program monitor dengan perintah "EXIT". Monitor dapat digunakan untuk menampilkan semua chat pada room, mulai dari chat pertama hingga chat yang akan datang.
 
 ---
-### 1. Discorit
+## 1. Discorit
 Untuk mengakses DiscorIT, user perlu membuka program client (discorit). Discorit hanya bekerja sebagai client yang mengirimkan request user kepada server. Program server berjalan sebagai server yang menerima semua request dari client dan mengembalikan response kepada client sesuai ketentuan pada soal. __Program server berjalan sebagai daemon__. Untuk hanya menampilkan chat, user perlu membuka program client (monitor). Lebih lengkapnya pada poin monitor. Program client dan server berinteraksi melalui socket. Server dapat terhubung dengan lebih dari satu client.
 
 Deklarasi library yang akan digunakan
@@ -269,7 +269,7 @@ int main(int argc, char *argv[]) {
 
 ___
 
-### 2. Server
+## 2. Server
 ```c
 #include <stdio.h>
 #include <stdlib.h>
@@ -3149,7 +3149,7 @@ Fungsi Main yang berisi fungsi yang dipanggil untuk:
 
 ___
 
-### 3. Monitor
+## 3. Monitor
 1. User dapat menampilkan isi chat secara real-time menggunakan monitor. Jika ada perubahan pada isi chat, perubahan tersebut akan langsung ditampilkan di terminal.
 2. Sebelum dapat menggunakan monitor, user harus login terlebih dahulu seperti login di DiscorIT.
 3. Untuk keluar dari room dan menghentikan program monitor dengan perintah "EXIT".
