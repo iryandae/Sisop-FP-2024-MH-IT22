@@ -3,8 +3,9 @@
 - 5027231003  Chelsea Vania Hariyono
 - 5027231024  Furqon Aryadana
 - 5027231057  Elgracito Iryanda Endia
-
-
+***
+---
+___
 ### Discorit
 ```c
 #include <stdio.h>
