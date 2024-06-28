@@ -3,8 +3,6 @@
 - 5027231003  Chelsea Vania Hariyono
 - 5027231024  Furqon Aryadana
 - 5027231057  Elgracito Iryanda Endia
-***
----
 ___
 ### Discorit
 ```c
@@ -215,6 +213,7 @@ int main(int argc, char *argv[]) {
 ```
 Fungsi ```main``` untuk memangggil fungsi dan mengeluarkan output
 
+___
 
 ### Server
 ```c
@@ -3094,6 +3093,7 @@ Fungsi Main yang berisi fungsi yang dipanggil untuk:
     - edit_user
     - remove_user_root
 
+___
 
 ### Monitor
 1. User dapat menampilkan isi chat secara real-time menggunakan monitor. Jika ada perubahan pada isi chat, perubahan tersebut akan langsung ditampilkan di terminal.
